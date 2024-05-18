@@ -1,0 +1,14 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/strapi', '.']
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/strapi']
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args: ['run', 'deploy', 'strapi',
+           '--image', 'gcr.io/$PROJECT_ID/strapi',
+           '--platform', 'managed',
+           '--region', 'asia-southeast2',
+           '--allow-unauthenticated']
+images:
+  - 'gcr.io/$PROJECT_ID/strapi'
